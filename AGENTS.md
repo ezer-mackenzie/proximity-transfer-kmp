@@ -14,7 +14,7 @@ The first milestone must work entirely with an in-memory transport. Do not imple
 
 ## Architecture rules
 
-- Keep shared library logic under the `dev.proximitytransfer.core` package inside the single `library` Gradle module.
+- Keep shared library logic under the `io.github.ezer_mackenzie.proximitytransfer.core` package inside the single `library` Gradle module.
 - Keep protocol and transport separated through interfaces.
 - Keep protocol models, framing, codec, chunking, reconstruction, integrity, negotiation, and session state in common Kotlin whenever platform APIs are not required.
 - Isolate Android and iOS APIs in their respective source sets or platform modules.

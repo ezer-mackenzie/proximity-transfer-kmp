@@ -11,7 +11,7 @@ version = providers.gradleProperty("project.version").get()
 kotlin {
     jvm()
     androidLibrary {
-        namespace = "dev.proximitytransfer"
+        namespace = "io.github.ezer_mackenzie.proximitytransfer"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
 

@@ -113,7 +113,9 @@ Only after this works reliably will the project add real proximity transports.
 
 The exact Gradle module structure may evolve. Empty modules will not be created merely to reserve names.
 
-For the MVP, these responsibilities remain in the single `library` Gradle module. Shared Kotlin code is grouped under `dev.proximitytransfer.core`, with focused `protocol`, `transfer`, and `transport` subpackages. New Gradle modules will only be introduced when isolation provides a concrete build or distribution benefit.
+For the MVP, these responsibilities remain in the single `library` Gradle module. Shared Kotlin code is grouped under `io.github.ezer_mackenzie.proximitytransfer.core`, with focused `protocol`, `transfer`, and `transport` subpackages. New Gradle modules will only be introduced when isolation provides a concrete build or distribution benefit.
+
+The Kotlin and Android namespace uses `_` because hyphens are not valid Kotlin identifiers. The Gradle/Maven group retains the GitHub account spelling: `io.github.ezer-mackenzie`.
 
 The experimental binary header is documented in [docs/wire-format.md](docs/wire-format.md).
 
