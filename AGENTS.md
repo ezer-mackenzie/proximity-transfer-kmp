@@ -14,6 +14,7 @@ The first milestone must work entirely with an in-memory transport. Do not imple
 
 ## Architecture rules
 
+- Keep shared library logic under the `dev.proximitytransfer.core` package inside the single `library` Gradle module.
 - Keep protocol and transport separated through interfaces.
 - Keep protocol models, framing, codec, chunking, reconstruction, integrity, negotiation, and session state in common Kotlin whenever platform APIs are not required.
 - Isolate Android and iOS APIs in their respective source sets or platform modules.
@@ -64,7 +65,7 @@ Tests must not require Android or iOS hardware for core protocol behavior.
 ## Kotlin and testing
 
 - Keep each class, interface, and enum in its own file, named after the type. Small type aliases and extension functions may share a focused file when they do not define an independent type.
-- Organize packages by cohesive responsibility as they grow; for example, connection contracts belong under `transport.connection` and concrete transports under their own packages.
+- Organize packages by cohesive responsibility as they grow; for example, connection contracts belong under `core.transport.connection` and concrete transports under their own packages.
 - Prefer immutable models, explicit domain types, sealed hierarchies, coroutines, and dependency inversion.
 - Avoid global mutable state, giant manager classes, unnecessary inheritance, Android dependencies in common code, and speculative abstractions.
 - Cover encode/decode round trips, chunk reconstruction, valid and invalid state transitions, corrupt data, missing and duplicate chunks, unsupported versions, unknown messages, hash mismatch, and interruptions as those features are introduced.

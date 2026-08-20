@@ -113,6 +113,8 @@ Only after this works reliably will the project add real proximity transports.
 
 The exact Gradle module structure may evolve. Empty modules will not be created merely to reserve names.
 
+For the MVP, these responsibilities remain in the single `library` Gradle module. Shared Kotlin code is grouped under `dev.proximitytransfer.core`, with focused `protocol`, `transfer`, and `transport` subpackages. New Gradle modules will only be introduced when isolation provides a concrete build or distribution benefit.
+
 The experimental binary header is documented in [docs/wire-format.md](docs/wire-format.md).
 
 ## Non-goals
