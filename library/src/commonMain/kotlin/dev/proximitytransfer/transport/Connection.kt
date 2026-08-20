@@ -7,5 +7,3 @@ interface Connection {
 
     suspend fun close()
 }
-
-class ConnectionClosedException(message: String) : IllegalStateException(message)

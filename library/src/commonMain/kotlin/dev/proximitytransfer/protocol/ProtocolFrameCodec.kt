@@ -68,5 +68,3 @@ object ProtocolFrameCodec {
             ((source[offset + 2].toInt() and 0xFF) shl 8) or
             (source[offset + 3].toInt() and 0xFF)
 }
-
-class FrameDecodingException(message: String) : IllegalArgumentException(message)
