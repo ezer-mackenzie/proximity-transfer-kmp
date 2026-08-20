@@ -102,6 +102,8 @@ Only after this works reliably will the project add real proximity transports.
 
 The exact Gradle module structure may evolve. Empty modules will not be created merely to reserve names.
 
+The experimental binary header is documented in [docs/wire-format.md](docs/wire-format.md).
+
 ## Non-goals
 
 Early versions do not provide an application UI, cloud synchronization, accounts, backend services, domain-specific models, analytics, or custom cryptographic primitives.
