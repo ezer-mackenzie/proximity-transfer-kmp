@@ -31,10 +31,11 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            // Shared protocol dependencies belong here.
+            implementation(libs.coroutines.core)
         }
 
         commonTest.dependencies {
+            implementation(libs.coroutines.test)
             implementation(libs.kotlin.test)
         }
     }

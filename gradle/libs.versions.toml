@@ -3,8 +3,11 @@ agp = "9.1.0"
 android-compileSdk = "36"
 android-minSdk = "24"
 kotlin = "2.4.10"
+coroutines = "1.11.0"
 
 [libraries]
+coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 
 [plugins]

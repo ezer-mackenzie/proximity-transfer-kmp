@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Initial project vision and contribution documentation.
 - Android and iPhone capability and interoperability strategy.
 - Experimental protocol version model and deterministic binary frame codec.
+- Transport and connection abstractions with a bidirectional in-memory implementation.
 
 ### Changed
 
