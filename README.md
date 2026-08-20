@@ -2,7 +2,9 @@
 
 Proximity Transfer is an experimental Kotlin Multiplatform library for transferring arbitrary binary data directly between nearby devices. Its design is offline-first, transport-agnostic, and independent of application-specific business models.
 
-The repository is currently in its foundation stage. The existing template code is not yet an implementation of the protocol.
+The repository is currently in its foundation stage. No protocol implementation exists yet.
+
+The current development version is `0.1.0-SNAPSHOT`. No public protocol version has been released.
 
 ## Goal
 
