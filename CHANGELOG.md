@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Experimental protocol version model and deterministic binary frame codec.
 - Transport and connection abstractions with a bidirectional in-memory implementation.
 - Basic protocol sender and receiver for a single binary payload.
+- Deterministic payload chunking, chunk metadata codec, and validated reconstruction.
 
 ### Changed
 

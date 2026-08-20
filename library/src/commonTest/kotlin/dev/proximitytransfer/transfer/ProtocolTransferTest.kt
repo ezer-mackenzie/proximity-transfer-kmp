@@ -15,7 +15,7 @@ class ProtocolTransferTest {
         sizes.forEach { size ->
             val expected = Random(size).nextBytes(size)
             val (senderTransport, receiverTransport) = MemoryTransport.createPair()
-            val sender = ProtocolSender(senderTransport.open())
+            val sender = ProtocolSender(senderTransport.open(), chunkSize = 127)
             val receiver = ProtocolReceiver(receiverTransport.open())
             val received = async { receiver.receive() }
 

@@ -18,6 +18,20 @@ Each frame uses a fixed 10-byte header followed by its payload:
 |---:|---|---|
 | 1 | `DATA` | Carries opaque payload bytes |
 
+## `DATA` payload
+
+For the current single-transfer protocol, every `DATA` frame contains one chunk:
+
+| Payload offset | Size | Field | Encoding |
+|---:|---:|---|---|
+| 0 | 4 bytes | Chunk index | Non-negative integer, big-endian |
+| 4 | 4 bytes | Total chunks | Positive integer, big-endian |
+| 8 | Variable | Chunk data | Opaque bytes |
+
+Indexes are zero-based. The default sender chunk size is 16 KiB. An empty payload is represented by one chunk with index `0`, total `1`, and no chunk data.
+
+The receiver accepts chunks out of order during reconstruction but rejects missing indexes, duplicate indexes, inconsistent totals, and invalid metadata. The current sender and receiver handle one transfer at a time, so this experimental format does not yet carry a transfer or session identifier.
+
 Decoders reject invalid magic, unsupported versions, unknown frame types, negative or mismatched lengths, and incomplete headers. Encoders currently emit only the current protocol version.
 
-The frame header does not itself provide authentication, encryption, or corruption detection. End-to-end integrity and session security are separate protocol layers planned for later milestones.
+Neither header provides authentication, encryption, or corruption detection. End-to-end integrity and session security are separate protocol layers planned for later milestones.
