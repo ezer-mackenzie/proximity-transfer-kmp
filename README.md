@@ -99,7 +99,8 @@ Only after this works reliably will the project add real proximity transports.
 - [x] Basic sender and receiver for one payload.
 - [x] Chunking and reconstruction.
 - [x] SHA-256 verification.
-- [ ] Session state and capability negotiation.
+- [x] Session state machine.
+- [ ] Capability negotiation.
 - [ ] Platform transports.
 
 ## Planned architecture
@@ -118,6 +119,7 @@ For the MVP, these responsibilities remain in the single `library` Gradle module
 The Kotlin and Android namespace uses `_` because hyphens are not valid Kotlin identifiers. The Gradle/Maven group retains the GitHub account spelling: `io.github.ezer-mackenzie`.
 
 The experimental binary header is documented in [docs/wire-format.md](docs/wire-format.md).
+The validated transfer lifecycle is documented in [docs/state-machine.md](docs/state-machine.md).
 
 ## Non-goals
 
