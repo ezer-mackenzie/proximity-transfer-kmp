@@ -1,9 +1,11 @@
 package dev.proximitytransfer.protocol
 
+/** Encodes and decodes the deterministic binary frame format documented in `docs/wire-format.md`. */
 object ProtocolFrameCodec {
     private val magic = byteArrayOf(0x50, 0x58, 0x46, 0x52) // PXFR
     private const val HeaderSize = 10
 
+    /** Encodes [frame], rejecting versions this implementation cannot emit. */
     fun encode(frame: ProtocolFrame): ByteArray {
         require(frame.version == ProtocolVersion.Current) {
             "Unsupported protocol version: ${frame.version.value}"
@@ -21,6 +23,7 @@ object ProtocolFrameCodec {
         return encoded
     }
 
+    /** Decodes one complete frame or throws [FrameDecodingException] when it is invalid. */
     fun decode(encoded: ByteArray): ProtocolFrame {
         if (encoded.size < HeaderSize) {
             throw FrameDecodingException("Frame is shorter than the $HeaderSize-byte header")

@@ -7,6 +7,11 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
+/**
+ * One endpoint of an in-memory, bidirectional transport used for protocol tests.
+ *
+ * Obtain connected endpoints through [createPair]. Each endpoint can be opened once.
+ */
 class MemoryTransport private constructor(
     private val incoming: Channel<ByteArray>,
     private val outgoing: Channel<ByteArray>,
@@ -24,6 +29,7 @@ class MemoryTransport private constructor(
     }
 
     companion object {
+        /** Creates two transport endpoints whose connections exchange copied byte arrays. */
         fun createPair(): Pair<MemoryTransport, MemoryTransport> {
             val firstToSecond = Channel<ByteArray>(Channel.UNLIMITED)
             val secondToFirst = Channel<ByteArray>(Channel.UNLIMITED)

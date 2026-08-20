@@ -73,6 +73,8 @@ Tests must not require Android or iOS hardware for core protocol behavior.
 
 Keep architectural and interoperability decisions synchronized with the public documentation. Do not copy this file into tool-specific instruction files; those files should point here.
 
+Document public APIs with KDoc when their contract, ownership, failure behavior, or platform implications are not obvious. Avoid comments that merely repeat the code, and keep implementation-only details private.
+
 Priority when choosing an implementation:
 
 ```text

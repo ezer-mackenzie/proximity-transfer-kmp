@@ -1,5 +1,11 @@
 package dev.proximitytransfer.protocol
 
+/**
+ * An immutable protocol frame.
+ *
+ * The supplied [payload] is copied during construction, and reading [payload]
+ * returns another copy so callers cannot mutate frame contents.
+ */
 class ProtocolFrame(
     val version: ProtocolVersion,
     val type: FrameType,
