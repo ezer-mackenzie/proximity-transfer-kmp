@@ -17,6 +17,19 @@ Each frame uses a fixed 10-byte header followed by its payload:
 | Code | Name | Purpose |
 |---:|---|---|
 | 1 | `DATA` | Carries opaque payload bytes |
+| 2 | `MANIFEST` | Declares payload size, chunk count, and SHA-256 digest |
+
+## `MANIFEST` payload
+
+Every transfer starts with one fixed-width manifest:
+
+| Payload offset | Size | Field | Encoding |
+|---:|---:|---|---|
+| 0 | 8 bytes | Payload size | Non-negative integer, big-endian |
+| 8 | 4 bytes | Chunk count | Positive integer, big-endian |
+| 12 | 32 bytes | SHA-256 | Digest of the complete original payload |
+
+The receiver uses the declared chunk count to read one complete transfer. It reconstructs the payload, validates its size, computes SHA-256, and rejects the transfer unless both values match the manifest.
 
 ## `DATA` payload
 
@@ -34,4 +47,4 @@ The receiver accepts chunks out of order during reconstruction but rejects missi
 
 Decoders reject invalid magic, unsupported versions, unknown frame types, negative or mismatched lengths, and incomplete headers. Encoders currently emit only the current protocol version.
 
-Neither header provides authentication, encryption, or corruption detection. End-to-end integrity and session security are separate protocol layers planned for later milestones.
+SHA-256 detects accidental or malicious content modification relative to the received manifest, but the manifest is not authenticated yet. Peer authentication, encryption, and authenticated metadata remain separate protocol layers planned for later milestones.

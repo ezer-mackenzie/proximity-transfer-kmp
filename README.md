@@ -98,7 +98,7 @@ Only after this works reliably will the project add real proximity transports.
 - [x] Bidirectional memory transport.
 - [x] Basic sender and receiver for one payload.
 - [x] Chunking and reconstruction.
-- [ ] SHA-256 verification.
+- [x] SHA-256 verification.
 - [ ] Session state and capability negotiation.
 - [ ] Platform transports.
 

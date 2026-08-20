@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Transport and connection abstractions with a bidirectional in-memory implementation.
 - Basic protocol sender and receiver for a single binary payload.
 - Deterministic payload chunking, chunk metadata codec, and validated reconstruction.
+- Transfer manifests with payload size and end-to-end SHA-256 verification.
 
 ### Changed
 
