@@ -1,8 +1,8 @@
 package dev.proximitytransfer.transport.memory
 
-import dev.proximitytransfer.transport.Connection
 import dev.proximitytransfer.transport.Transport
 import dev.proximitytransfer.transport.TransportAlreadyOpenedException
+import dev.proximitytransfer.transport.connection.Connection
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock

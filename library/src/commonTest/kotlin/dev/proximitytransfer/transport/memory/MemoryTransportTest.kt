@@ -1,7 +1,7 @@
 package dev.proximitytransfer.transport.memory
 
-import dev.proximitytransfer.transport.ConnectionClosedException
 import dev.proximitytransfer.transport.TransportAlreadyOpenedException
+import dev.proximitytransfer.transport.connection.ConnectionClosedException
 import kotlinx.coroutines.async
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test

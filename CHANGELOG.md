@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Replaced the upstream template identity with the Proximity Transfer project identity.
 - Set the development version to `0.1.0-SNAPSHOT`.
 - Organized classes, interfaces, and enums into individual files.
+- Grouped connection contracts under the dedicated `transport.connection` package.
 
 ### Removed
 

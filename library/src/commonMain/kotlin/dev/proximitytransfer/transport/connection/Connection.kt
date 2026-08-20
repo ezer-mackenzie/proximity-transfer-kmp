@@ -1,4 +1,4 @@
-package dev.proximitytransfer.transport
+package dev.proximitytransfer.transport.connection
 
 interface Connection {
     suspend fun send(data: ByteArray)

@@ -1,7 +1,7 @@
 package dev.proximitytransfer.transport.memory
 
-import dev.proximitytransfer.transport.Connection
-import dev.proximitytransfer.transport.ConnectionClosedException
+import dev.proximitytransfer.transport.connection.Connection
+import dev.proximitytransfer.transport.connection.ConnectionClosedException
 import kotlinx.coroutines.channels.Channel
 
 internal class MemoryConnection(

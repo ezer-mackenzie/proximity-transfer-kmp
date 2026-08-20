@@ -64,6 +64,7 @@ Tests must not require Android or iOS hardware for core protocol behavior.
 ## Kotlin and testing
 
 - Keep each class, interface, and enum in its own file, named after the type. Small type aliases and extension functions may share a focused file when they do not define an independent type.
+- Organize packages by cohesive responsibility as they grow; for example, connection contracts belong under `transport.connection` and concrete transports under their own packages.
 - Prefer immutable models, explicit domain types, sealed hierarchies, coroutines, and dependency inversion.
 - Avoid global mutable state, giant manager classes, unnecessary inheritance, Android dependencies in common code, and speculative abstractions.
 - Cover encode/decode round trips, chunk reconstruction, valid and invalid state transitions, corrupt data, missing and duplicate chunks, unsupported versions, unknown messages, hash mismatch, and interruptions as those features are introduced.
