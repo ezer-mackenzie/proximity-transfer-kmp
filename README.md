@@ -103,6 +103,7 @@ Only after this works reliably will the project add real proximity transports.
 - [x] Capability negotiation.
 - [x] Capability exchange over an established connection.
 - [x] Receiver completion/error acknowledgement.
+- [x] Connection interruption failure handling.
 - [ ] Platform transports.
 
 ## Planned architecture

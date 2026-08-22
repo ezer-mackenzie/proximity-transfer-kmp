@@ -4,6 +4,7 @@ import io.github.ezer_mackenzie.proximitytransfer.core.integrity.IntegrityVerifi
 import io.github.ezer_mackenzie.proximitytransfer.core.session.SessionState
 import io.github.ezer_mackenzie.proximitytransfer.core.transfer.control.RemoteErrorCode
 import io.github.ezer_mackenzie.proximitytransfer.core.transfer.control.RemoteTransferException
+import io.github.ezer_mackenzie.proximitytransfer.core.transport.connection.ConnectionClosedException
 import io.github.ezer_mackenzie.proximitytransfer.core.transport.memory.MemoryTransport
 import kotlinx.coroutines.async
 import kotlinx.coroutines.test.runTest
@@ -48,6 +49,32 @@ class ProtocolTransferTest {
         assertEquals(RemoteErrorCode.INTEGRITY_FAILURE, exception.error.code)
         assertEquals(true, receiverFailure is IntegrityVerificationException)
         assertEquals(SessionState.FAILED, sender.session.state.value)
+        assertEquals(SessionState.FAILED, receiver.session.state.value)
+    }
+
+    @Test
+    fun senderFailsWhenReceiverDisconnects() = runTest {
+        val (senderTransport, receiverTransport) = MemoryTransport.createPair()
+        val sender = ProtocolSender(senderTransport.open())
+        receiverTransport.open().close()
+
+        assertFailsWith<ConnectionClosedException> {
+            sender.send(byteArrayOf(1, 2, 3))
+        }
+
+        assertEquals(SessionState.FAILED, sender.session.state.value)
+    }
+
+    @Test
+    fun receiverFailsWhenSenderDisconnects() = runTest {
+        val (senderTransport, receiverTransport) = MemoryTransport.createPair()
+        val senderConnection = senderTransport.open()
+        val receiver = ProtocolReceiver(receiverTransport.open())
+        val received = async { runCatching { receiver.receive() } }
+
+        senderConnection.close()
+
+        assertEquals(true, received.await().exceptionOrNull() is ConnectionClosedException)
         assertEquals(SessionState.FAILED, receiver.session.state.value)
     }
 }
