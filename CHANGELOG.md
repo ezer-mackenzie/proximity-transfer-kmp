@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Observable, concurrency-safe transfer session state machine with validated transitions.
 - Runtime transport capabilities, binary capability codec, and deterministic negotiation.
 - Bidirectional capability exchange over an established connection with transfer-session reuse.
+- Runtime registry that resolves negotiated data capabilities to concrete transport implementations.
 - Receiver `COMPLETE`/`ERROR` acknowledgements integrated with sender and receiver session states.
 - Deterministic failure behavior when either transfer endpoint disconnects.
 

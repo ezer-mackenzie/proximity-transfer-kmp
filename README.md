@@ -102,6 +102,7 @@ Only after this works reliably will the project add real proximity transports.
 - [x] Session state machine.
 - [x] Capability negotiation.
 - [x] Capability exchange over an established connection.
+- [x] Negotiated data-transport registry and resolution.
 - [x] Receiver completion/error acknowledgement.
 - [x] Connection interruption failure handling.
 - [ ] Platform transports.

@@ -48,4 +48,6 @@ Applications may provide a different deterministic preference. If no common data
 
 `CapabilityExchange` sends each peer's encoded capabilities through an already established `Connection`, validates the remote `CAPABILITIES` frame, and applies this selection. Its `TransferSession` can then be passed to `ProtocolSender` or `ProtocolReceiver`, preserving the negotiated lifecycle through transfer completion.
 
-This milestone exchanges and selects capability identifiers only. It does not open, switch, or configure a concrete radio transport.
+`DataTransportRegistry` binds data-capability identifiers to concrete `Transport` implementations available at runtime. Its advertised capabilities are derived from those registrations, and `open` fails explicitly with `MissingTransportImplementationException` if a negotiated implementation is unavailable.
+
+The registry can open an already configured transport, but it does not configure a radio, establish a network, or migrate protocol state between two connections. Those responsibilities belong to future platform adapters and connection orchestration.
