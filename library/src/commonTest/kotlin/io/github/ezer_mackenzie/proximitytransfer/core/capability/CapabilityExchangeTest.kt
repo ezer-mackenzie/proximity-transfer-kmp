@@ -78,4 +78,29 @@ class CapabilityExchangeTest {
         assertEquals(SessionState.FAILED, first.session.state.value)
         assertEquals(SessionState.FAILED, second.session.state.value)
     }
+
+    @Test
+    fun differentLocalPreferencesFailInsteadOfOpeningDifferentTransports() = runTest {
+        val (firstTransport, secondTransport) = MemoryTransport.createPair()
+        val capabilities = DeviceCapabilities(
+            setOf(TransportCapability.BLE, TransportCapability.MEMORY),
+        )
+        val first = CapabilityExchange(firstTransport.open())
+        val second = CapabilityExchange(
+            connection = secondTransport.open(),
+            negotiator = TransportNegotiator(
+                dataPreference = listOf(
+                    TransportCapability.MEMORY,
+                    TransportCapability.BLE,
+                ),
+            ),
+        )
+        val firstResult = async { runCatching { first.negotiate(capabilities) } }
+        val secondResult = async { runCatching { second.negotiate(capabilities) } }
+
+        assertIs<NegotiationDisagreementException>(firstResult.await().exceptionOrNull())
+        assertIs<NegotiationDisagreementException>(secondResult.await().exceptionOrNull())
+        assertEquals(SessionState.FAILED, first.session.state.value)
+        assertEquals(SessionState.FAILED, second.session.state.value)
+    }
 }

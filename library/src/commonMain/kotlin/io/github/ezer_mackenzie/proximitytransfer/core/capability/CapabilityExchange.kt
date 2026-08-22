@@ -20,6 +20,11 @@ class CapabilityExchange(
             send(local)
             val remote = receive()
             val result = negotiator.negotiate(local, remote)
+            sendSelection(result)
+            val remoteResult = receiveSelection()
+            if (result != remoteResult) {
+                throw NegotiationDisagreementException(result, remoteResult)
+            }
             session.transitionTo(SessionState.CONNECTED)
             return result
         } catch (exception: Exception) {
@@ -48,5 +53,22 @@ class CapabilityExchange(
             "Expected CAPABILITIES but received ${frame.type}"
         }
         return DeviceCapabilitiesCodec.decode(frame.payload)
+    }
+
+    private suspend fun sendSelection(result: NegotiationResult) {
+        val frame = ProtocolFrame(
+            version = ProtocolVersion.Current,
+            type = FrameType.TRANSPORT_SELECTION,
+            payload = NegotiationResultCodec.encode(result),
+        )
+        connection.send(ProtocolFrameCodec.encode(frame))
+    }
+
+    private suspend fun receiveSelection(): NegotiationResult {
+        val frame = ProtocolFrameCodec.decode(connection.receive())
+        require(frame.type == FrameType.TRANSPORT_SELECTION) {
+            "Expected TRANSPORT_SELECTION but received ${frame.type}"
+        }
+        return NegotiationResultCodec.decode(frame.payload)
     }
 }

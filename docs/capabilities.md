@@ -46,6 +46,8 @@ MEMORY
 
 Applications may provide a different deterministic preference. If no common data transport exists, negotiation throws `NoCompatibleTransportException`; it never silently chooses a platform-exclusive capability.
 
+After local selection, peers exchange a `TRANSPORT_SELECTION` frame. Both the data and optional bootstrap choices must match exactly. Different preference configurations therefore fail with `NegotiationDisagreementException` instead of opening incompatible transports.
+
 `CapabilityExchange` sends each peer's encoded capabilities through an already established `Connection`, validates the remote `CAPABILITIES` frame, and applies this selection. Its `TransferSession` can then be passed to `ProtocolSender` or `ProtocolReceiver`, preserving the negotiated lifecycle through transfer completion.
 
 `DataTransportRegistry` binds data-capability identifiers to concrete `Transport` implementations available at runtime. Its advertised capabilities are derived from those registrations, and `open` fails explicitly with `MissingTransportImplementationException` if a negotiated implementation is unavailable.

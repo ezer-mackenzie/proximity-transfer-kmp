@@ -21,6 +21,7 @@ Each frame uses a fixed 10-byte header followed by its payload:
 | 3 | `CAPABILITIES` | Advertises the sender's runtime transport capabilities |
 | 4 | `COMPLETE` | Confirms that the receiver reconstructed and verified the payload |
 | 5 | `ERROR` | Reports that the receiver rejected the transfer |
+| 6 | `TRANSPORT_SELECTION` | Confirms the data and bootstrap route selected by a peer |
 
 ## `CAPABILITIES` payload
 
@@ -30,6 +31,15 @@ Each frame uses a fixed 10-byte header followed by its payload:
 | 1 | Variable | Capability codes | One unsigned byte per capability |
 
 Capability codes are encoded once each in ascending numeric order. Decoders reject empty sets, unknown codes, duplicates, and count mismatches. Codes and negotiation behavior are documented in [capabilities.md](capabilities.md).
+
+## `TRANSPORT_SELECTION` payload
+
+| Payload offset | Size | Field | Encoding |
+|---:|---:|---|---|
+| 0 | 1 byte | Data transport | Required capability code |
+| 1 | 1 byte | Bootstrap transport | Capability code, or `0` when absent |
+
+After computing the capability intersection, both peers exchange this frame and continue only when both selections are identical. A disagreement fails both sessions before either side opens a different data transport.
 
 ## `COMPLETE` payload
 

@@ -7,6 +7,7 @@ enum class FrameType(val code: Int) {
     CAPABILITIES(3),
     COMPLETE(4),
     ERROR(5),
+    TRANSPORT_SELECTION(6),
     ;
 
     companion object {

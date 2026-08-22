@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Bidirectional capability exchange over an established connection with transfer-session reuse.
 - Runtime registry that resolves negotiated data capabilities to concrete transport implementations.
 - Control-to-data connection orchestration with transfer-session continuity.
+- Explicit peer confirmation of negotiated routes before opening a data transport.
 - Receiver `COMPLETE`/`ERROR` acknowledgements integrated with sender and receiver session states.
 - Deterministic failure behavior when either transfer endpoint disconnects.
 - Observable sender and receiver byte progress through multiplatform `StateFlow` APIs.
