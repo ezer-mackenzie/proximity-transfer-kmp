@@ -50,4 +50,6 @@ Applications may provide a different deterministic preference. If no common data
 
 `DataTransportRegistry` binds data-capability identifiers to concrete `Transport` implementations available at runtime. Its advertised capabilities are derived from those registrations, and `open` fails explicitly with `MissingTransportImplementationException` if a negotiated implementation is unavailable.
 
-The registry can open an already configured transport, but it does not configure a radio, establish a network, or migrate protocol state between two connections. Those responsibilities belong to future platform adapters and connection orchestration.
+`DataConnectionNegotiator` coordinates the next layer: it uses an existing control connection for capability exchange, resolves the selected implementation, opens a separate data connection, and preserves the same `TransferSession` for `ProtocolSender` or `ProtocolReceiver`.
+
+The registry can open an already configured transport, but it does not configure a radio or establish a network. Those responsibilities belong to future platform adapters.

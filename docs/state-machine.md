@@ -25,4 +25,6 @@ Every nonterminal state may transition to `FAILED`. Both `COMPLETED` and `FAILED
 
 `TransferSession` serializes concurrent transition attempts and exposes state through a read-only `StateFlow`. `CapabilityExchange`, `ProtocolSender`, and `ProtocolReceiver` accept and expose a session so the same lifecycle can continue from negotiation into transfer. The sender enters `COMPLETED` only after receiving a `COMPLETE` frame containing the expected SHA-256 digest. A local validation error or remote `ERROR` moves the corresponding session to `FAILED`.
 
+`DataConnectionNegotiator` preserves this lifecycle while moving from an established control connection to the negotiated data connection. Failure to open the selected transport moves the local session from `CONNECTED` to `FAILED`.
+
 If either endpoint closes while sending, receiving, or waiting for an acknowledgement, the operation throws `ConnectionClosedException` and its active session moves to `FAILED`. Reconnection and transfer resumption are not implemented yet.
