@@ -31,6 +31,10 @@ class ProtocolTransferTest {
             assertContentEquals(expected, received.await(), "Payload size: $size")
             assertEquals(SessionState.COMPLETED, sender.session.state.value)
             assertEquals(SessionState.COMPLETED, receiver.session.state.value)
+            assertEquals(size.toLong(), sender.progress.value?.transferredBytes)
+            assertEquals(size.toLong(), receiver.progress.value?.transferredBytes)
+            assertEquals(true, sender.progress.value?.isComplete)
+            assertEquals(true, receiver.progress.value?.isComplete)
         }
     }
 

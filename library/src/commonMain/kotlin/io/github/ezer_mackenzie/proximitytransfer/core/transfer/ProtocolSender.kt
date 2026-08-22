@@ -15,7 +15,11 @@ import io.github.ezer_mackenzie.proximitytransfer.core.transfer.control.RemoteEr
 import io.github.ezer_mackenzie.proximitytransfer.core.transfer.control.RemoteTransferException
 import io.github.ezer_mackenzie.proximitytransfer.core.transfer.manifest.TransferManifest
 import io.github.ezer_mackenzie.proximitytransfer.core.transfer.manifest.TransferManifestCodec
+import io.github.ezer_mackenzie.proximitytransfer.core.transfer.progress.TransferProgress
 import io.github.ezer_mackenzie.proximitytransfer.core.transport.connection.Connection
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 /** Sends application payloads as versioned protocol frames over a [Connection]. */
 class ProtocolSender(
@@ -24,6 +28,10 @@ class ProtocolSender(
     val session: TransferSession = TransferSession(),
 ) {
     private val chunker = PayloadChunker(chunkSize)
+    private val mutableProgress = MutableStateFlow<TransferProgress?>(null)
+
+    /** Current payload-byte progress, or `null` before transfer starts. */
+    val progress: StateFlow<TransferProgress?> = mutableProgress.asStateFlow()
 
     /** Sends one payload and waits until the receiver confirms successful verification. */
     suspend fun send(payload: ByteArray) {
@@ -36,10 +44,14 @@ class ProtocolSender(
                 chunkCount = chunks.size,
                 sha256 = expectedDigest,
             )
+            mutableProgress.value = TransferProgress(0, manifest.payloadSize)
             sendFrame(FrameType.MANIFEST, TransferManifestCodec.encode(manifest))
 
+            var transferredBytes = 0L
             chunks.forEach { chunk ->
                 sendFrame(FrameType.DATA, PayloadChunkCodec.encode(chunk))
+                transferredBytes += chunk.size
+                mutableProgress.value = TransferProgress(transferredBytes, manifest.payloadSize)
             }
 
             session.transitionTo(SessionState.VERIFYING)

@@ -19,20 +19,39 @@ import io.github.ezer_mackenzie.proximitytransfer.core.transfer.control.RemoteEr
 import io.github.ezer_mackenzie.proximitytransfer.core.transfer.control.RemoteErrorCode
 import io.github.ezer_mackenzie.proximitytransfer.core.transfer.control.RemoteErrorCodec
 import io.github.ezer_mackenzie.proximitytransfer.core.transport.connection.Connection
+import io.github.ezer_mackenzie.proximitytransfer.core.transfer.progress.TransferProgress
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 /** Receives and validates versioned protocol frames from a [Connection]. */
 class ProtocolReceiver(
     private val connection: Connection,
     val session: TransferSession = TransferSession(),
 ) {
+    private val mutableProgress = MutableStateFlow<TransferProgress?>(null)
+
+    /** Current payload-byte progress, or `null` before a manifest is received. */
+    val progress: StateFlow<TransferProgress?> = mutableProgress.asStateFlow()
+
     /** Waits for one complete chunk set and returns the reconstructed payload. */
     suspend fun receive(): ByteArray {
         beginTransfer()
         try {
             val manifest = receiveManifest()
+            mutableProgress.value = TransferProgress(0, manifest.payloadSize)
             val chunks = mutableListOf<PayloadChunk>()
+            var transferredBytes = 0L
             repeat(manifest.chunkCount) {
-                chunks += receiveChunk()
+                val chunk = receiveChunk()
+                chunks += chunk
+                transferredBytes += chunk.size
+                if (transferredBytes <= manifest.payloadSize) {
+                    mutableProgress.value = TransferProgress(
+                        transferredBytes = transferredBytes,
+                        totalBytes = manifest.payloadSize,
+                    )
+                }
             }
             val payload = PayloadReconstructor.reconstruct(chunks)
             session.transitionTo(SessionState.VERIFYING)

@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Control-to-data connection orchestration with transfer-session continuity.
 - Receiver `COMPLETE`/`ERROR` acknowledgements integrated with sender and receiver session states.
 - Deterministic failure behavior when either transfer endpoint disconnects.
+- Observable sender and receiver byte progress through multiplatform `StateFlow` APIs.
 
 ### Changed
 

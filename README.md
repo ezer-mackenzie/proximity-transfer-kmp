@@ -106,6 +106,7 @@ Only after this works reliably will the project add real proximity transports.
 - [x] Control-to-data connection negotiation flow.
 - [x] Receiver completion/error acknowledgement.
 - [x] Connection interruption failure handling.
+- [x] Observable payload-byte transfer progress.
 - [ ] Platform transports.
 
 ## Planned architecture
