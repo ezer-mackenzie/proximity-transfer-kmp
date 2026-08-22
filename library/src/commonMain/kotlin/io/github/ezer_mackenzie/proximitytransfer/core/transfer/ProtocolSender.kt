@@ -13,6 +13,8 @@ import io.github.ezer_mackenzie.proximitytransfer.core.session.TransferSession
 import io.github.ezer_mackenzie.proximitytransfer.core.transfer.control.CompletionAcknowledgementCodec
 import io.github.ezer_mackenzie.proximitytransfer.core.transfer.control.RemoteErrorCodec
 import io.github.ezer_mackenzie.proximitytransfer.core.transfer.control.RemoteTransferException
+import io.github.ezer_mackenzie.proximitytransfer.core.transfer.config.TransferLimitExceededException
+import io.github.ezer_mackenzie.proximitytransfer.core.transfer.config.TransferLimits
 import io.github.ezer_mackenzie.proximitytransfer.core.transfer.manifest.TransferManifest
 import io.github.ezer_mackenzie.proximitytransfer.core.transfer.manifest.TransferManifestCodec
 import io.github.ezer_mackenzie.proximitytransfer.core.transfer.progress.TransferProgress
@@ -26,6 +28,7 @@ class ProtocolSender(
     private val connection: Connection,
     chunkSize: Int = PayloadChunker.DEFAULT_CHUNK_SIZE,
     val session: TransferSession = TransferSession(),
+    private val limits: TransferLimits = TransferLimits(),
 ) {
     private val chunker = PayloadChunker(chunkSize)
     private val mutableProgress = MutableStateFlow<TransferProgress?>(null)
@@ -37,8 +40,10 @@ class ProtocolSender(
     suspend fun send(payload: ByteArray) {
         beginTransfer()
         try {
+            validatePayloadSize(payload.size.toLong())
             val expectedDigest = Sha256.digest(payload)
             val chunks = chunker.split(payload)
+            validateChunkCount(chunks.size)
             val manifest = TransferManifest(
                 payloadSize = payload.size.toLong(),
                 chunkCount = chunks.size,
@@ -91,6 +96,22 @@ class ProtocolSender(
     private suspend fun failSession() {
         if (session.state.value != SessionState.COMPLETED && session.state.value != SessionState.FAILED) {
             session.fail()
+        }
+    }
+
+    private fun validatePayloadSize(payloadSize: Long) {
+        if (payloadSize > limits.maxPayloadBytes) {
+            throw TransferLimitExceededException(
+                "Payload size $payloadSize exceeds limit ${limits.maxPayloadBytes}",
+            )
+        }
+    }
+
+    private fun validateChunkCount(chunkCount: Int) {
+        if (chunkCount > limits.maxChunkCount) {
+            throw TransferLimitExceededException(
+                "Chunk count $chunkCount exceeds limit ${limits.maxChunkCount}",
+            )
         }
     }
 

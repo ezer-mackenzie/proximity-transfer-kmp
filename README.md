@@ -107,6 +107,7 @@ Only after this works reliably will the project add real proximity transports.
 - [x] Receiver completion/error acknowledgement.
 - [x] Connection interruption failure handling.
 - [x] Observable payload-byte transfer progress.
+- [x] Configurable payload and chunk resource limits.
 - [ ] Platform transports.
 
 ## Planned architecture

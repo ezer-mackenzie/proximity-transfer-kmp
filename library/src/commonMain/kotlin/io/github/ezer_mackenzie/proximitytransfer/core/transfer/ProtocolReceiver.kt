@@ -18,6 +18,8 @@ import io.github.ezer_mackenzie.proximitytransfer.core.transfer.control.Completi
 import io.github.ezer_mackenzie.proximitytransfer.core.transfer.control.RemoteError
 import io.github.ezer_mackenzie.proximitytransfer.core.transfer.control.RemoteErrorCode
 import io.github.ezer_mackenzie.proximitytransfer.core.transfer.control.RemoteErrorCodec
+import io.github.ezer_mackenzie.proximitytransfer.core.transfer.config.TransferLimitExceededException
+import io.github.ezer_mackenzie.proximitytransfer.core.transfer.config.TransferLimits
 import io.github.ezer_mackenzie.proximitytransfer.core.transport.connection.Connection
 import io.github.ezer_mackenzie.proximitytransfer.core.transfer.progress.TransferProgress
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,6 +30,7 @@ import kotlinx.coroutines.flow.asStateFlow
 class ProtocolReceiver(
     private val connection: Connection,
     val session: TransferSession = TransferSession(),
+    private val limits: TransferLimits = TransferLimits(),
 ) {
     private val mutableProgress = MutableStateFlow<TransferProgress?>(null)
 
@@ -39,6 +42,7 @@ class ProtocolReceiver(
         beginTransfer()
         try {
             val manifest = receiveManifest()
+            validateManifest(manifest)
             mutableProgress.value = TransferProgress(0, manifest.payloadSize)
             val chunks = mutableListOf<PayloadChunk>()
             var transferredBytes = 0L
@@ -104,6 +108,19 @@ class ProtocolReceiver(
         }
         if (!Sha256.digest(payload).contentEquals(manifest.sha256)) {
             throw IntegrityVerificationException("Reconstructed payload failed SHA-256 verification")
+        }
+    }
+
+    private fun validateManifest(manifest: TransferManifest) {
+        if (manifest.payloadSize > limits.maxPayloadBytes) {
+            throw TransferLimitExceededException(
+                "Payload size ${manifest.payloadSize} exceeds limit ${limits.maxPayloadBytes}",
+            )
+        }
+        if (manifest.chunkCount > limits.maxChunkCount) {
+            throw TransferLimitExceededException(
+                "Chunk count ${manifest.chunkCount} exceeds limit ${limits.maxChunkCount}",
+            )
         }
     }
 

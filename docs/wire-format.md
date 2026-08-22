@@ -67,6 +67,8 @@ Every transfer starts with one fixed-width manifest:
 
 The receiver uses the declared chunk count to read one complete transfer. It reconstructs the payload, validates its size, computes SHA-256, and rejects the transfer unless both values match the manifest.
 
+Before reading chunks, sender and receiver enforce configurable `TransferLimits`. Defaults currently allow payloads up to 1 GiB and up to 1,000,000 chunks. Applications may lower or deliberately raise these limits according to their environment; exceeding either limit fails the session before payload processing continues.
+
 ## `DATA` payload
 
 For the current single-transfer protocol, every `DATA` frame contains one chunk:

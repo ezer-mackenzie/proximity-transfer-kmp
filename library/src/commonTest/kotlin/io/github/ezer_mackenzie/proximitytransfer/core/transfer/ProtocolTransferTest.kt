@@ -4,6 +4,14 @@ import io.github.ezer_mackenzie.proximitytransfer.core.integrity.IntegrityVerifi
 import io.github.ezer_mackenzie.proximitytransfer.core.session.SessionState
 import io.github.ezer_mackenzie.proximitytransfer.core.transfer.control.RemoteErrorCode
 import io.github.ezer_mackenzie.proximitytransfer.core.transfer.control.RemoteTransferException
+import io.github.ezer_mackenzie.proximitytransfer.core.transfer.config.TransferLimitExceededException
+import io.github.ezer_mackenzie.proximitytransfer.core.transfer.config.TransferLimits
+import io.github.ezer_mackenzie.proximitytransfer.core.transfer.manifest.TransferManifest
+import io.github.ezer_mackenzie.proximitytransfer.core.transfer.manifest.TransferManifestCodec
+import io.github.ezer_mackenzie.proximitytransfer.core.protocol.FrameType
+import io.github.ezer_mackenzie.proximitytransfer.core.protocol.ProtocolFrame
+import io.github.ezer_mackenzie.proximitytransfer.core.protocol.ProtocolFrameCodec
+import io.github.ezer_mackenzie.proximitytransfer.core.protocol.ProtocolVersion
 import io.github.ezer_mackenzie.proximitytransfer.core.transport.connection.ConnectionClosedException
 import io.github.ezer_mackenzie.proximitytransfer.core.transport.memory.MemoryTransport
 import kotlinx.coroutines.async
@@ -79,6 +87,49 @@ class ProtocolTransferTest {
         senderConnection.close()
 
         assertEquals(true, received.await().exceptionOrNull() is ConnectionClosedException)
+        assertEquals(SessionState.FAILED, receiver.session.state.value)
+    }
+
+    @Test
+    fun senderRejectsPayloadAboveConfiguredLimit() = runTest {
+        val (senderTransport, _) = MemoryTransport.createPair()
+        val sender = ProtocolSender(
+            connection = senderTransport.open(),
+            limits = TransferLimits(maxPayloadBytes = 3),
+        )
+
+        assertFailsWith<TransferLimitExceededException> {
+            sender.send(byteArrayOf(1, 2, 3, 4))
+        }
+
+        assertEquals(SessionState.FAILED, sender.session.state.value)
+    }
+
+    @Test
+    fun receiverRejectsManifestAboveConfiguredLimit() = runTest {
+        val (senderTransport, receiverTransport) = MemoryTransport.createPair()
+        val senderConnection = senderTransport.open()
+        val receiver = ProtocolReceiver(
+            connection = receiverTransport.open(),
+            limits = TransferLimits(maxPayloadBytes = 3),
+        )
+        val received = async { runCatching { receiver.receive() } }
+        val manifest = TransferManifest(
+            payloadSize = 4,
+            chunkCount = 1,
+            sha256 = ByteArray(32),
+        )
+        senderConnection.send(
+            ProtocolFrameCodec.encode(
+                ProtocolFrame(
+                    version = ProtocolVersion.Current,
+                    type = FrameType.MANIFEST,
+                    payload = TransferManifestCodec.encode(manifest),
+                ),
+            ),
+        )
+
+        assertEquals(true, received.await().exceptionOrNull() is TransferLimitExceededException)
         assertEquals(SessionState.FAILED, receiver.session.state.value)
     }
 }

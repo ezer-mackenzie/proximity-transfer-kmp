@@ -24,6 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Receiver `COMPLETE`/`ERROR` acknowledgements integrated with sender and receiver session states.
 - Deterministic failure behavior when either transfer endpoint disconnects.
 - Observable sender and receiver byte progress through multiplatform `StateFlow` APIs.
+- Configurable payload-size and chunk-count limits enforced before transfer processing.
 
 ### Changed
 
