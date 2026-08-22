@@ -23,9 +23,8 @@ import io.github.ezer_mackenzie.proximitytransfer.core.transport.connection.Conn
 /** Receives and validates versioned protocol frames from a [Connection]. */
 class ProtocolReceiver(
     private val connection: Connection,
+    val session: TransferSession = TransferSession(),
 ) {
-    val session = TransferSession()
-
     /** Waits for one complete chunk set and returns the reconstructed payload. */
     suspend fun receive(): ByteArray {
         beginTransfer()
@@ -56,7 +55,9 @@ class ProtocolReceiver(
     }
 
     private suspend fun beginTransfer() {
-        session.transitionTo(SessionState.CONNECTED)
+        if (session.state.value == SessionState.IDLE) {
+            session.transitionTo(SessionState.CONNECTED)
+        }
         session.transitionTo(SessionState.TRANSFERRING)
     }
 

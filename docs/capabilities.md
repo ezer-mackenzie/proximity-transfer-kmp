@@ -46,4 +46,6 @@ MEMORY
 
 Applications may provide a different deterministic preference. If no common data transport exists, negotiation throws `NoCompatibleTransportException`; it never silently chooses a platform-exclusive capability.
 
-This milestone selects capability identifiers only. It does not open, switch, or configure a concrete radio transport.
+`CapabilityExchange` sends each peer's encoded capabilities through an already established `Connection`, validates the remote `CAPABILITIES` frame, and applies this selection. Its `TransferSession` can then be passed to `ProtocolSender` or `ProtocolReceiver`, preserving the negotiated lifecycle through transfer completion.
+
+This milestone exchanges and selects capability identifiers only. It does not open, switch, or configure a concrete radio transport.

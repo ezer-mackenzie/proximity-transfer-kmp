@@ -21,9 +21,9 @@ import io.github.ezer_mackenzie.proximitytransfer.core.transport.connection.Conn
 class ProtocolSender(
     private val connection: Connection,
     chunkSize: Int = PayloadChunker.DEFAULT_CHUNK_SIZE,
+    val session: TransferSession = TransferSession(),
 ) {
     private val chunker = PayloadChunker(chunkSize)
-    val session = TransferSession()
 
     /** Sends one payload and waits until the receiver confirms successful verification. */
     suspend fun send(payload: ByteArray) {
@@ -52,7 +52,9 @@ class ProtocolSender(
     }
 
     private suspend fun beginTransfer() {
-        session.transitionTo(SessionState.CONNECTED)
+        if (session.state.value == SessionState.IDLE) {
+            session.transitionTo(SessionState.CONNECTED)
+        }
         session.transitionTo(SessionState.TRANSFERRING)
     }
 

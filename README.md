@@ -101,6 +101,7 @@ Only after this works reliably will the project add real proximity transports.
 - [x] SHA-256 verification.
 - [x] Session state machine.
 - [x] Capability negotiation.
+- [x] Capability exchange over an established connection.
 - [x] Receiver completion/error acknowledgement.
 - [ ] Platform transports.
 

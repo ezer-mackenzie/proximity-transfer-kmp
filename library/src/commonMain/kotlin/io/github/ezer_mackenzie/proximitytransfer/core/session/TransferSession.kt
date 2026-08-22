@@ -38,6 +38,7 @@ class TransferSession {
         val allowedTransitions = mapOf(
             SessionState.IDLE to setOf(
                 SessionState.DISCOVERING,
+                SessionState.NEGOTIATING,
                 SessionState.CONNECTED,
                 SessionState.FAILED,
             ),

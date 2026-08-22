@@ -30,6 +30,16 @@ class TransferSessionTest {
     }
 
     @Test
+    fun supportsNegotiationOverPreEstablishedBootstrapConnection() = runTest {
+        val session = TransferSession()
+
+        session.transitionTo(SessionState.NEGOTIATING)
+        session.transitionTo(SessionState.CONNECTED)
+
+        assertEquals(SessionState.CONNECTED, session.state.value)
+    }
+
+    @Test
     fun rejectsInvalidTransitionWithoutChangingState() = runTest {
         val session = TransferSession()
 
