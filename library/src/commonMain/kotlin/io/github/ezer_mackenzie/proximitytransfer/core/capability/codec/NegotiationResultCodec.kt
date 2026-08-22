@@ -1,4 +1,7 @@
-package io.github.ezer_mackenzie.proximitytransfer.core.capability
+package io.github.ezer_mackenzie.proximitytransfer.core.capability.codec
+
+import io.github.ezer_mackenzie.proximitytransfer.core.capability.model.NegotiationResult
+import io.github.ezer_mackenzie.proximitytransfer.core.capability.model.TransportCapability
 
 /** Deterministic two-byte codec for a negotiated data and optional bootstrap transport. */
 object NegotiationResultCodec {

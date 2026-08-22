@@ -1,4 +1,10 @@
-package io.github.ezer_mackenzie.proximitytransfer.core.capability
+package io.github.ezer_mackenzie.proximitytransfer.core.capability.exchange
+
+import io.github.ezer_mackenzie.proximitytransfer.core.capability.model.DeviceCapabilities
+import io.github.ezer_mackenzie.proximitytransfer.core.capability.model.TransportCapability
+import io.github.ezer_mackenzie.proximitytransfer.core.capability.negotiation.NegotiationDisagreementException
+import io.github.ezer_mackenzie.proximitytransfer.core.capability.negotiation.NoCompatibleTransportException
+import io.github.ezer_mackenzie.proximitytransfer.core.capability.negotiation.TransportNegotiator
 
 import io.github.ezer_mackenzie.proximitytransfer.core.session.SessionState
 import io.github.ezer_mackenzie.proximitytransfer.core.transfer.ProtocolReceiver

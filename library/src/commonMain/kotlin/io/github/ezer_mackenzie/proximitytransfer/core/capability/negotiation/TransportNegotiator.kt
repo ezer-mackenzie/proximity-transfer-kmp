@@ -1,4 +1,8 @@
-package io.github.ezer_mackenzie.proximitytransfer.core.capability
+package io.github.ezer_mackenzie.proximitytransfer.core.capability.negotiation
+
+import io.github.ezer_mackenzie.proximitytransfer.core.capability.model.DeviceCapabilities
+import io.github.ezer_mackenzie.proximitytransfer.core.capability.model.NegotiationResult
+import io.github.ezer_mackenzie.proximitytransfer.core.capability.model.TransportCapability
 
 /** Selects deterministic compatible transports from two runtime capability sets. */
 class TransportNegotiator(

@@ -1,6 +1,6 @@
 package io.github.ezer_mackenzie.proximitytransfer.core.transport.selection
 
-import io.github.ezer_mackenzie.proximitytransfer.core.capability.TransportCapability
+import io.github.ezer_mackenzie.proximitytransfer.core.capability.model.TransportCapability
 import io.github.ezer_mackenzie.proximitytransfer.core.session.SessionState
 import io.github.ezer_mackenzie.proximitytransfer.core.transfer.ProtocolReceiver
 import io.github.ezer_mackenzie.proximitytransfer.core.transfer.ProtocolSender

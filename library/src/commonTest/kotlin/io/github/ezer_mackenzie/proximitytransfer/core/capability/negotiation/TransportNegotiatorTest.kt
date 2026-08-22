@@ -1,4 +1,7 @@
-package io.github.ezer_mackenzie.proximitytransfer.core.capability
+package io.github.ezer_mackenzie.proximitytransfer.core.capability.negotiation
+
+import io.github.ezer_mackenzie.proximitytransfer.core.capability.model.DeviceCapabilities
+import io.github.ezer_mackenzie.proximitytransfer.core.capability.model.TransportCapability
 
 import kotlin.test.Test
 import kotlin.test.assertEquals

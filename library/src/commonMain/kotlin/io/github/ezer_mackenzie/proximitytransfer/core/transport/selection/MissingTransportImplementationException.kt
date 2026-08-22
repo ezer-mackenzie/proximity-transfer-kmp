@@ -1,6 +1,6 @@
 package io.github.ezer_mackenzie.proximitytransfer.core.transport.selection
 
-import io.github.ezer_mackenzie.proximitytransfer.core.capability.TransportCapability
+import io.github.ezer_mackenzie.proximitytransfer.core.capability.model.TransportCapability
 
 /** Indicates that a negotiated capability has no registered runtime implementation. */
 class MissingTransportImplementationException(

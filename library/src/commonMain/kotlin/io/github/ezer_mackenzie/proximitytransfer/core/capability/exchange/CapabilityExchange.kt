@@ -1,4 +1,11 @@
-package io.github.ezer_mackenzie.proximitytransfer.core.capability
+package io.github.ezer_mackenzie.proximitytransfer.core.capability.exchange
+
+import io.github.ezer_mackenzie.proximitytransfer.core.capability.codec.DeviceCapabilitiesCodec
+import io.github.ezer_mackenzie.proximitytransfer.core.capability.codec.NegotiationResultCodec
+import io.github.ezer_mackenzie.proximitytransfer.core.capability.model.DeviceCapabilities
+import io.github.ezer_mackenzie.proximitytransfer.core.capability.model.NegotiationResult
+import io.github.ezer_mackenzie.proximitytransfer.core.capability.negotiation.NegotiationDisagreementException
+import io.github.ezer_mackenzie.proximitytransfer.core.capability.negotiation.TransportNegotiator
 
 import io.github.ezer_mackenzie.proximitytransfer.core.protocol.FrameType
 import io.github.ezer_mackenzie.proximitytransfer.core.protocol.ProtocolFrame

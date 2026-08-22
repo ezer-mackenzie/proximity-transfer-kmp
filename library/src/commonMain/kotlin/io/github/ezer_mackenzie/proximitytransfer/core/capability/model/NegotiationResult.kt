@@ -1,4 +1,4 @@
-package io.github.ezer_mackenzie.proximitytransfer.core.capability
+package io.github.ezer_mackenzie.proximitytransfer.core.capability.model
 
 /** The compatible bootstrap and data paths selected for two peers. */
 class NegotiationResult(

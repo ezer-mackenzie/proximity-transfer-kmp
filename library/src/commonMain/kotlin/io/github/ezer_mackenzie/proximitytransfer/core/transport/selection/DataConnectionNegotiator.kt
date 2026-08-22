@@ -1,7 +1,7 @@
 package io.github.ezer_mackenzie.proximitytransfer.core.transport.selection
 
-import io.github.ezer_mackenzie.proximitytransfer.core.capability.CapabilityExchange
-import io.github.ezer_mackenzie.proximitytransfer.core.capability.TransportNegotiator
+import io.github.ezer_mackenzie.proximitytransfer.core.capability.exchange.CapabilityExchange
+import io.github.ezer_mackenzie.proximitytransfer.core.capability.negotiation.TransportNegotiator
 import io.github.ezer_mackenzie.proximitytransfer.core.session.SessionState
 import io.github.ezer_mackenzie.proximitytransfer.core.session.TransferSession
 import io.github.ezer_mackenzie.proximitytransfer.core.transport.connection.Connection

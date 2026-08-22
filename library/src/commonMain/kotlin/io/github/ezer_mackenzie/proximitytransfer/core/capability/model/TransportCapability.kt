@@ -1,4 +1,4 @@
-package io.github.ezer_mackenzie.proximitytransfer.core.capability
+package io.github.ezer_mackenzie.proximitytransfer.core.capability.model
 
 /** A transport feature that a peer can currently offer to a protocol session. */
 enum class TransportCapability(

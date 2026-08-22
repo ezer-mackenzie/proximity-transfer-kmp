@@ -1,8 +1,8 @@
 package io.github.ezer_mackenzie.proximitytransfer.core.transport.selection
 
-import io.github.ezer_mackenzie.proximitytransfer.core.capability.DeviceCapabilities
-import io.github.ezer_mackenzie.proximitytransfer.core.capability.NegotiationResult
-import io.github.ezer_mackenzie.proximitytransfer.core.capability.TransportCapability
+import io.github.ezer_mackenzie.proximitytransfer.core.capability.model.DeviceCapabilities
+import io.github.ezer_mackenzie.proximitytransfer.core.capability.model.NegotiationResult
+import io.github.ezer_mackenzie.proximitytransfer.core.capability.model.TransportCapability
 import io.github.ezer_mackenzie.proximitytransfer.core.transport.Transport
 import io.github.ezer_mackenzie.proximitytransfer.core.transport.connection.Connection
 

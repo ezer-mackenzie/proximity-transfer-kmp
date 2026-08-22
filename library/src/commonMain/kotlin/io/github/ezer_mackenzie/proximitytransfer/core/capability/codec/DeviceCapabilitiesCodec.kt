@@ -1,4 +1,7 @@
-package io.github.ezer_mackenzie.proximitytransfer.core.capability
+package io.github.ezer_mackenzie.proximitytransfer.core.capability.codec
+
+import io.github.ezer_mackenzie.proximitytransfer.core.capability.model.DeviceCapabilities
+import io.github.ezer_mackenzie.proximitytransfer.core.capability.model.TransportCapability
 
 /** Encodes transport capabilities in stable numeric-code order. */
 object DeviceCapabilitiesCodec {

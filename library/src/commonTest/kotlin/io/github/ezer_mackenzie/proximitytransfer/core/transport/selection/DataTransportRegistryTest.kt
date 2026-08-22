@@ -1,7 +1,7 @@
 package io.github.ezer_mackenzie.proximitytransfer.core.transport.selection
 
-import io.github.ezer_mackenzie.proximitytransfer.core.capability.NegotiationResult
-import io.github.ezer_mackenzie.proximitytransfer.core.capability.TransportCapability
+import io.github.ezer_mackenzie.proximitytransfer.core.capability.model.NegotiationResult
+import io.github.ezer_mackenzie.proximitytransfer.core.capability.model.TransportCapability
 import io.github.ezer_mackenzie.proximitytransfer.core.transport.memory.MemoryTransport
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test

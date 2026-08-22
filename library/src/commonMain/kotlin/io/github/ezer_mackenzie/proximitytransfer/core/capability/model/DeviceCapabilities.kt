@@ -1,4 +1,4 @@
-package io.github.ezer_mackenzie.proximitytransfer.core.capability
+package io.github.ezer_mackenzie.proximitytransfer.core.capability.model
 
 /** Immutable set of transport capabilities currently available on one peer. */
 class DeviceCapabilities(
