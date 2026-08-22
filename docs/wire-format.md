@@ -19,6 +19,8 @@ Each frame uses a fixed 10-byte header followed by its payload:
 | 1 | `DATA` | Carries opaque payload bytes |
 | 2 | `MANIFEST` | Declares payload size, chunk count, and SHA-256 digest |
 | 3 | `CAPABILITIES` | Advertises the sender's runtime transport capabilities |
+| 4 | `COMPLETE` | Confirms that the receiver reconstructed and verified the payload |
+| 5 | `ERROR` | Reports that the receiver rejected the transfer |
 
 ## `CAPABILITIES` payload
 
@@ -28,6 +30,20 @@ Each frame uses a fixed 10-byte header followed by its payload:
 | 1 | Variable | Capability codes | One unsigned byte per capability |
 
 Capability codes are encoded once each in ascending numeric order. Decoders reject empty sets, unknown codes, duplicates, and count mismatches. Codes and negotiation behavior are documented in [capabilities.md](capabilities.md).
+
+## `COMPLETE` payload
+
+`COMPLETE` contains exactly the 32-byte SHA-256 digest verified by the receiver. The sender compares it with its original digest before reporting success.
+
+## `ERROR` payload
+
+| Payload offset | Size | Field | Encoding |
+|---:|---:|---|---|
+| 0 | 1 byte | Error code | Unsigned integer |
+| 1 | 2 bytes | Message length | Unsigned integer, big-endian |
+| 3 | Variable | Message | Bounded UTF-8 text |
+
+Current error codes are `1` for a malformed transfer and `2` for integrity failure. Messages are limited to 1,024 bytes and must match the declared length.
 
 ## `MANIFEST` payload
 

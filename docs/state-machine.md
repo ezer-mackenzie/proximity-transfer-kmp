@@ -22,4 +22,4 @@ The direct `IDLE → CONNECTED` transition supports connections established outs
 
 Every nonterminal state may transition to `FAILED`. Both `COMPLETED` and `FAILED` are terminal. Invalid transitions throw `InvalidSessionTransitionException` and do not modify the current state.
 
-`TransferSession` serializes concurrent transition attempts and exposes state through a read-only `StateFlow`. It is not yet coupled to `ProtocolSender` or `ProtocolReceiver`: the current sender has no acknowledgement proving that the remote receiver verified the payload. That integration requires completion/error protocol messages in a later milestone.
+`TransferSession` serializes concurrent transition attempts and exposes state through a read-only `StateFlow`. `ProtocolSender` and `ProtocolReceiver` each expose their session. The sender enters `COMPLETED` only after receiving a `COMPLETE` frame containing the expected SHA-256 digest. A local validation error or remote `ERROR` moves the corresponding session to `FAILED`.
