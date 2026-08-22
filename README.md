@@ -2,7 +2,7 @@
 
 Proximity Transfer is an experimental Kotlin Multiplatform library for transferring arbitrary binary data directly between nearby devices. Its design is offline-first, transport-agnostic, and independent of application-specific business models.
 
-The repository is currently in its foundation stage. It can transfer a single binary payload through the in-memory transport; chunking, end-to-end integrity verification, and hardware transports are not implemented yet.
+The repository is currently in its foundation stage. It can negotiate compatible capabilities and transfer a chunked, SHA-256-verified binary payload through the in-memory transport. Hardware transports are not implemented yet.
 
 The current development version is `0.1.0-SNAPSHOT`. No public protocol version has been released.
 
@@ -100,7 +100,7 @@ Only after this works reliably will the project add real proximity transports.
 - [x] Chunking and reconstruction.
 - [x] SHA-256 verification.
 - [x] Session state machine.
-- [ ] Capability negotiation.
+- [x] Capability negotiation.
 - [ ] Platform transports.
 
 ## Planned architecture
@@ -120,6 +120,7 @@ The Kotlin and Android namespace uses `_` because hyphens are not valid Kotlin i
 
 The experimental binary header is documented in [docs/wire-format.md](docs/wire-format.md).
 The validated transfer lifecycle is documented in [docs/state-machine.md](docs/state-machine.md).
+Runtime capabilities and deterministic selection are documented in [docs/capabilities.md](docs/capabilities.md).
 
 ## Non-goals
 

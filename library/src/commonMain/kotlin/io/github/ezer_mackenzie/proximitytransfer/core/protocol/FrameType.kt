@@ -4,6 +4,7 @@ package io.github.ezer_mackenzie.proximitytransfer.core.protocol
 enum class FrameType(val code: Int) {
     DATA(1),
     MANIFEST(2),
+    CAPABILITIES(3),
     ;
 
     companion object {

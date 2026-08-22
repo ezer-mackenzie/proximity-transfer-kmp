@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Deterministic payload chunking, chunk metadata codec, and validated reconstruction.
 - Transfer manifests with payload size and end-to-end SHA-256 verification.
 - Observable, concurrency-safe transfer session state machine with validated transitions.
+- Runtime transport capabilities, binary capability codec, and deterministic negotiation.
 
 ### Changed
 
