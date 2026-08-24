@@ -27,6 +27,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Configurable payload-size and chunk-count limits enforced before transfer processing.
 - Deterministic length-prefixed stream codec (`StreamFramingCodec`) for continuous byte streams over network sockets.
 - `LocalNetworkTransport` and `SocketConnection` implementations backing the `LOCAL_NETWORK` transport capability.
+- Connection bootstrapping domain model (`BootstrapPayload`) and binary codec (`BootstrapPayloadCodec`).
+- Compact QR code URI codec (`QrBootstrapCodec`) formatting `proximity://v1?data=...` payloads.
 
 ### Changed
 
