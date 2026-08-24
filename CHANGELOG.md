@@ -25,6 +25,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Deterministic failure behavior when either transfer endpoint disconnects.
 - Observable sender and receiver byte progress through multiplatform `StateFlow` APIs.
 - Configurable payload-size and chunk-count limits enforced before transfer processing.
+- Deterministic length-prefixed stream codec (`StreamFramingCodec`) for continuous byte streams over network sockets.
+- `LocalNetworkTransport` and `SocketConnection` implementations backing the `LOCAL_NETWORK` transport capability.
 
 ### Changed
 
