@@ -45,6 +45,7 @@ kotlin {
 
 publishing {
     publications.withType<MavenPublication> {
+        artifactId = artifactId.replace("library", "proximity-transfer")
         pom {
             name.set("Proximity Transfer")
             description.set("Kotlin Multiplatform library for offline, proximity-based peer-to-peer data transfer.")
