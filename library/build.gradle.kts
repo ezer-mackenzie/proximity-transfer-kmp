@@ -43,9 +43,14 @@ kotlin {
     }
 }
 
+val javadocJar by tasks.registering(Jar::class) {
+    archiveClassifier.set("javadoc")
+}
+
 publishing {
     publications.withType<MavenPublication> {
         artifactId = artifactId.replace("library", "proximity-transfer")
+        artifact(javadocJar)
         pom {
             name.set("Proximity Transfer")
             description.set("Kotlin Multiplatform library for offline, proximity-based peer-to-peer data transfer.")
