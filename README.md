@@ -4,7 +4,7 @@ Proximity Transfer is an experimental Kotlin Multiplatform library for transferr
 
 The repository is currently in its foundation stage. It can negotiate compatible capabilities and transfer a chunked, SHA-256-verified binary payload through the in-memory transport. Hardware transports are not implemented yet.
 
-The current development version is `0.1.0-SNAPSHOT`. No public protocol version has been released.
+The current release version is `0.2.0`.
 
 ## Goal
 
