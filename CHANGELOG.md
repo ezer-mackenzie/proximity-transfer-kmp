@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Binary NDEF NFC bootstrap codec (`NfcBootstrapCodec`) formatting `application/vnd.proximitytransfer.bootstrap+bin` records.
+- Multi-item transfer manifest domain models and binary codec (`MultiItemManifest`, `ManifestItem`, `MultiItemManifestCodec`).
+- Resumable transfer protocol with compact chunk reception bitmaps (`ChunkBitmap`, `ResumeRequest`, `ResumeRequestCodec`).
+- Resumable protocol sender and receiver implementations (`ResumableProtocolSender`, `ResumableProtocolReceiver`).
+- Session frame security with sequence-derived keystreams and HMAC-SHA256 authentication (`SessionKeySpec`, `FrameEncryptionCodec`).
+- Handshake key exchange nonces and session key derivation (`HandshakeMessage`, `HandshakeMessageCodec`).
+- High-level multiplatform facade interface and implementation (`ProximityTransferEngine`, `DefaultProximityTransferEngine`).
+- Maven Central and GitHub Packages publication configuration (`maven-publish`) in Gradle library module.
+
 ## [0.1.0] - 2026-08-24
 
 ### Added

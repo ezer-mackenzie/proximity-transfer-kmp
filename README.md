@@ -108,7 +108,12 @@ Only after this works reliably will the project add real proximity transports.
 - [x] Connection interruption failure handling.
 - [x] Observable payload-byte transfer progress.
 - [x] Configurable payload and chunk resource limits.
-- [ ] Platform transports.
+- [x] QR code URI bootstrap codec (`proximity://v1?data=...`).
+- [x] Binary NDEF NFC bootstrap codec (`NfcBootstrapCodec`).
+- [x] Multi-item payload manifests (`MultiItemManifestCodec`).
+- [x] Resumable transfers & missing chunk bitmap recovery (`ChunkBitmap`, `ResumeRequestCodec`).
+- [x] Frame payload security & authenticated encryption (`FrameEncryptionCodec`, `HandshakeMessageCodec`).
+- [x] High-level engine facade (`ProximityTransferEngine`).
 
 ## Planned architecture
 
