@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.android.kotlin.multiplatform.library)
+    `maven-publish`
 }
 
 group = providers.gradleProperty("project.group").get()
@@ -41,3 +42,35 @@ kotlin {
         }
     }
 }
+
+publishing {
+    publications.withType<MavenPublication> {
+        pom {
+            name.set("Proximity Transfer")
+            description.set("Kotlin Multiplatform library for offline, proximity-based peer-to-peer data transfer.")
+            url.set("https://github.com/ezer-mackenzie/proximity-transfer-kmp")
+
+            licenses {
+                license {
+                    name.set("Apache-2.0")
+                    url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
+                }
+            }
+
+            developers {
+                developer {
+                    id.set("ezer-mackenzie")
+                    name.set("Eli-ezer Reuven Ramirez Ruiz")
+                    email.set("ramirez.ruiz.eliezer.reuven@gmail.com")
+                }
+            }
+
+            scm {
+                connection.set("scm:git:git://github.com/ezer-mackenzie/proximity-transfer-kmp.git")
+                developerConnection.set("scm:git:ssh://github.com/ezer-mackenzie/proximity-transfer-kmp.git")
+                url.set("https://github.com/ezer-mackenzie/proximity-transfer-kmp")
+            }
+        }
+    }
+}
+
