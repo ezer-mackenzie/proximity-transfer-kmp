@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Bluetooth Low Energy (BLE) bootstrap payload binary codec (`BleBootstrapCodec`).
+- Android platform transport foundation for BLE L2CAP socket connections (`AndroidBleTransport`).
+- iOS platform transport foundation for Multipeer Connectivity (`IosMultipeerTransport`).
+
 ## [0.2.0] - 2026-08-26
 
 ### Added
