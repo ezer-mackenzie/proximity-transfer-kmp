@@ -10,7 +10,13 @@ import kotlin.test.assertEquals
 
 class ProximityTransferEngineTest {
 
-    private val engine: ProximityTransferEngine = DefaultProximityTransferEngine()
+    private val engine: ProximityTransferEngine = ProximityTransferEngine.create()
+
+    @Test
+    fun factoryCreatesDefaultEngineInstance() {
+        val createdEngine = ProximityTransferEngine.create()
+        assertEquals(DefaultProximityTransferEngine::class, createdEngine::class)
+    }
 
     @Test
     fun formatsAndParsesQrBootstrapUri() {

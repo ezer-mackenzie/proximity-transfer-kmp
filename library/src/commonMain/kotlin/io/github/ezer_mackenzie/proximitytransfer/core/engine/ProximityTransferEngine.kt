@@ -68,4 +68,9 @@ interface ProximityTransferEngine {
 
     /** Decodes binary manifest bytes into a [MultiItemManifest]. */
     fun decodeMultiItemManifest(bytes: ByteArray): MultiItemManifest
+
+    companion object {
+        /** Creates a new instance of [ProximityTransferEngine]. */
+        fun create(): ProximityTransferEngine = DefaultProximityTransferEngine()
+    }
 }

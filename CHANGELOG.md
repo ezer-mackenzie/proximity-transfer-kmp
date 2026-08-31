@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-08-31
+
+### Added
+
+- Network service discovery advertisement model and binary codec (`NetworkServiceAdvertisement`, `NetworkDiscoveryCodec`).
+- Resumable session state persistence models and thread-safe store (`SessionSnapshot`, `SessionStore`, `InMemorySessionStore`).
+
+## [0.3.0] - 2026-08-28
+
 ### Added
 
 - Bluetooth Low Energy (BLE) bootstrap payload binary codec (`BleBootstrapCodec`).
