@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-08-31
+
+### Added
+
+- Session recovery orchestrator for automated snapshot retrieval and transfer resumption (`SessionRecoveryOrchestrator`).
+- Sequential multi-payload batch transfer controller (`PayloadBatchTransfer`).
+
 ## [0.4.0] - 2026-08-31
 
 ### Added
