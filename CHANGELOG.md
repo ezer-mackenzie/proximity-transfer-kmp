@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-08-31
+
+### Added
+
+- Binary cancellation signal codec and session cancellation handler (`CancelSignalCodec`, `SessionCancellationHandler`).
+- Priority-based transport selection manager with automatic fallback fallback (`TransportFallbackSelector`).
+
 ## [0.7.0] - 2026-08-31
 
 ### Added
