@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-08-31
+
+### Added
+
+- Configurable connection retry policy with exponential backoff and timeout handling (`TransportRetryPolicy`).
+- End-to-end multiplatform payload and manifest validation helper (`CrossPlatformTransferValidator`).
+
 ## [0.5.0] - 2026-08-31
 
 ### Added
