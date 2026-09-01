@@ -56,8 +56,9 @@ class DefaultProximityTransferEngine : ProximityTransferEngine {
         payload: ByteArray,
         session: TransferSession,
         resumeRequest: ResumeRequest?,
+        keySpec: io.github.ezer_mackenzie.proximitytransfer.core.security.SessionKeySpec?,
     ) {
-        val sender = ResumableProtocolSender(connection = connection, session = session)
+        val sender = ResumableProtocolSender(connection = connection, session = session, keySpec = keySpec)
         sender.send(payload, resumeRequest)
     }
 
@@ -65,8 +66,9 @@ class DefaultProximityTransferEngine : ProximityTransferEngine {
         connection: Connection,
         session: TransferSession,
         existingBitmap: ChunkBitmap?,
+        keySpec: io.github.ezer_mackenzie.proximitytransfer.core.security.SessionKeySpec?,
     ): Pair<ByteArray, ChunkBitmap> {
-        val receiver = ResumableProtocolReceiver(connection = connection, session = session)
+        val receiver = ResumableProtocolReceiver(connection = connection, session = session, keySpec = keySpec)
         return receiver.receive(existingBitmap = existingBitmap)
     }
 

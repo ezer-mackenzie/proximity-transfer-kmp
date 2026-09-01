@@ -31,9 +31,11 @@ class ResumableProtocolSender(
     chunkSize: Int = PayloadChunker.DEFAULT_CHUNK_SIZE,
     val session: TransferSession = TransferSession(),
     private val limits: TransferLimits = TransferLimits(),
+    private val keySpec: io.github.ezer_mackenzie.proximitytransfer.core.security.SessionKeySpec? = null,
 ) {
     private val chunker = PayloadChunker(chunkSize)
     private val mutableProgress = MutableStateFlow<TransferProgress?>(null)
+    private var sequenceNumber = 0L
 
     val progress: StateFlow<TransferProgress?> = mutableProgress.asStateFlow()
 
@@ -87,7 +89,7 @@ class ResumableProtocolSender(
     }
 
     private suspend fun receiveOutcome(expectedDigest: ByteArray) {
-        val frame = ProtocolFrameCodec.decode(connection.receive())
+        val frame = receiveFrame()
         when (frame.type) {
             FrameType.COMPLETE -> {
                 val acknowledgement = CompletionAcknowledgementCodec.decode(frame.payload)
@@ -98,6 +100,14 @@ class ResumableProtocolSender(
             FrameType.ERROR -> throw RemoteTransferException(RemoteErrorCodec.decode(frame.payload))
             else -> throw IllegalArgumentException("Expected COMPLETE or ERROR but received ${frame.type}")
         }
+    }
+
+    private suspend fun receiveFrame(): ProtocolFrame {
+        var bytes = connection.receive()
+        if (keySpec != null) {
+            bytes = io.github.ezer_mackenzie.proximitytransfer.core.security.FrameEncryptionCodec.decrypt(bytes, keySpec)
+        }
+        return ProtocolFrameCodec.decode(bytes)
     }
 
     private suspend fun failSession() {
@@ -120,6 +130,14 @@ class ResumableProtocolSender(
 
     private suspend fun sendFrame(type: FrameType, payload: ByteArray) {
         val frame = ProtocolFrame(ProtocolVersion.Current, type, payload)
-        connection.send(ProtocolFrameCodec.encode(frame))
+        var bytes = ProtocolFrameCodec.encode(frame)
+        if (keySpec != null) {
+            bytes = io.github.ezer_mackenzie.proximitytransfer.core.security.FrameEncryptionCodec.encrypt(
+                payload = bytes,
+                sequenceNumber = sequenceNumber++,
+                keySpec = keySpec,
+            )
+        }
+        connection.send(bytes)
     }
 }

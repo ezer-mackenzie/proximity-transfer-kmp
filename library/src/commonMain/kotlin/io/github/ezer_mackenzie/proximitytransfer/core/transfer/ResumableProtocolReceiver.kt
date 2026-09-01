@@ -32,8 +32,10 @@ class ResumableProtocolReceiver(
     private val connection: Connection,
     val session: TransferSession = TransferSession(),
     private val limits: TransferLimits = TransferLimits(),
+    private val keySpec: io.github.ezer_mackenzie.proximitytransfer.core.security.SessionKeySpec? = null,
 ) {
     private val mutableProgress = MutableStateFlow<TransferProgress?>(null)
+    private var sendSequenceNumber = 0L
 
     val progress: StateFlow<TransferProgress?> = mutableProgress.asStateFlow()
 
@@ -48,7 +50,7 @@ class ResumableProtocolReceiver(
     ): Pair<ByteArray, ChunkBitmap> {
         beginTransfer()
         try {
-            val manifestFrame = ProtocolFrameCodec.decode(connection.receive())
+            val manifestFrame = receiveFrame()
             if (manifestFrame.type != FrameType.MANIFEST) {
                 val message = "Expected MANIFEST frame but received ${manifestFrame.type}"
                 sendErrorFrame(RemoteErrorCode.MALFORMED_TRANSFER, message)
@@ -70,7 +72,7 @@ class ResumableProtocolReceiver(
             mutableProgress.value = TransferProgress(receivedBytes, manifest.payloadSize)
 
             while (bitmap.missingChunkIndices().isNotEmpty()) {
-                val frame = ProtocolFrameCodec.decode(connection.receive())
+                val frame = receiveFrame()
                 if (frame.type != FrameType.DATA) {
                     val message = "Expected DATA frame but received ${frame.type}"
                     sendErrorFrame(RemoteErrorCode.MALFORMED_TRANSFER, message)
@@ -137,8 +139,24 @@ class ResumableProtocolReceiver(
         }
     }
 
+    private suspend fun receiveFrame(): ProtocolFrame {
+        var bytes = connection.receive()
+        if (keySpec != null) {
+            bytes = io.github.ezer_mackenzie.proximitytransfer.core.security.FrameEncryptionCodec.decrypt(bytes, keySpec)
+        }
+        return ProtocolFrameCodec.decode(bytes)
+    }
+
     private suspend fun sendFrame(type: FrameType, payload: ByteArray) {
         val frame = ProtocolFrame(ProtocolVersion.Current, type, payload)
-        connection.send(ProtocolFrameCodec.encode(frame))
+        var bytes = ProtocolFrameCodec.encode(frame)
+        if (keySpec != null) {
+            bytes = io.github.ezer_mackenzie.proximitytransfer.core.security.FrameEncryptionCodec.encrypt(
+                payload = bytes,
+                sequenceNumber = sendSequenceNumber++,
+                keySpec = keySpec,
+            )
+        }
+        connection.send(bytes)
     }
 }

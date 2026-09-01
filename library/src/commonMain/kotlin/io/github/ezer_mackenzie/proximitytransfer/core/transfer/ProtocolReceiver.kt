@@ -31,8 +31,10 @@ class ProtocolReceiver(
     private val connection: Connection,
     val session: TransferSession = TransferSession(),
     private val limits: TransferLimits = TransferLimits(),
+    private val keySpec: io.github.ezer_mackenzie.proximitytransfer.core.security.SessionKeySpec? = null,
 ) {
     private val mutableProgress = MutableStateFlow<TransferProgress?>(null)
+    private var sendSequenceNumber = 0L
 
     /** Current payload-byte progress, or `null` before a manifest is received. */
     val progress: StateFlow<TransferProgress?> = mutableProgress.asStateFlow()
@@ -85,7 +87,7 @@ class ProtocolReceiver(
     }
 
     private suspend fun receiveManifest(): TransferManifest {
-        val frame = ProtocolFrameCodec.decode(connection.receive())
+        val frame = receiveFrame()
         require(frame.type == FrameType.MANIFEST) {
             "Expected a MANIFEST frame but received ${frame.type}"
         }
@@ -93,11 +95,19 @@ class ProtocolReceiver(
     }
 
     private suspend fun receiveChunk(): PayloadChunk {
-        val frame = ProtocolFrameCodec.decode(connection.receive())
+        val frame = receiveFrame()
         require(frame.type == FrameType.DATA) {
             "Expected a DATA frame but received ${frame.type}"
         }
         return PayloadChunkCodec.decode(frame.payload)
+    }
+
+    private suspend fun receiveFrame(): ProtocolFrame {
+        var bytes = connection.receive()
+        if (keySpec != null) {
+            bytes = io.github.ezer_mackenzie.proximitytransfer.core.security.FrameEncryptionCodec.decrypt(bytes, keySpec)
+        }
+        return ProtocolFrameCodec.decode(bytes)
     }
 
     private fun verify(payload: ByteArray, manifest: TransferManifest) {
@@ -124,19 +134,13 @@ class ProtocolReceiver(
         }
     }
 
-    private suspend fun sendComplete(digest: ByteArray) {
-        sendFrame(
-            FrameType.COMPLETE,
-            CompletionAcknowledgementCodec.encode(CompletionAcknowledgement(digest)),
-        )
+    private suspend fun sendComplete(sha256: ByteArray) {
+        sendFrame(FrameType.COMPLETE, CompletionAcknowledgementCodec.encode(CompletionAcknowledgement(sha256)))
     }
 
-    private suspend fun sendError(code: RemoteErrorCode, message: String?) {
+    private suspend fun sendError(code: RemoteErrorCode, message: String) {
         try {
-            sendFrame(
-                FrameType.ERROR,
-                RemoteErrorCodec.encode(RemoteError(code, message.orEmpty())),
-            )
+            sendFrame(FrameType.ERROR, RemoteErrorCodec.encode(RemoteError(code, message)))
         } catch (_: Exception) {
             // Preserve the original receive failure when the connection cannot report it.
         }
@@ -144,7 +148,15 @@ class ProtocolReceiver(
 
     private suspend fun sendFrame(type: FrameType, payload: ByteArray) {
         val frame = ProtocolFrame(ProtocolVersion.Current, type, payload)
-        connection.send(ProtocolFrameCodec.encode(frame))
+        var bytes = ProtocolFrameCodec.encode(frame)
+        if (keySpec != null) {
+            bytes = io.github.ezer_mackenzie.proximitytransfer.core.security.FrameEncryptionCodec.encrypt(
+                payload = bytes,
+                sequenceNumber = sendSequenceNumber++,
+                keySpec = keySpec,
+            )
+        }
+        connection.send(bytes)
     }
 
     private suspend fun failSession() {

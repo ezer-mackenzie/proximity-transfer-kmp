@@ -29,9 +29,11 @@ class ProtocolSender(
     chunkSize: Int = PayloadChunker.DEFAULT_CHUNK_SIZE,
     val session: TransferSession = TransferSession(),
     private val limits: TransferLimits = TransferLimits(),
+    private val keySpec: io.github.ezer_mackenzie.proximitytransfer.core.security.SessionKeySpec? = null,
 ) {
     private val chunker = PayloadChunker(chunkSize)
     private val mutableProgress = MutableStateFlow<TransferProgress?>(null)
+    private var sequenceNumber = 0L
 
     /** Current payload-byte progress, or `null` before transfer starts. */
     val progress: StateFlow<TransferProgress?> = mutableProgress.asStateFlow()
@@ -76,7 +78,7 @@ class ProtocolSender(
     }
 
     private suspend fun receiveOutcome(expectedDigest: ByteArray) {
-        val frame = ProtocolFrameCodec.decode(connection.receive())
+        val frame = receiveFrame()
         when (frame.type) {
             FrameType.COMPLETE -> {
                 val acknowledgement = CompletionAcknowledgementCodec.decode(frame.payload)
@@ -91,6 +93,14 @@ class ProtocolSender(
                 "Expected COMPLETE or ERROR but received ${frame.type}",
             )
         }
+    }
+
+    private suspend fun receiveFrame(): ProtocolFrame {
+        var bytes = connection.receive()
+        if (keySpec != null) {
+            bytes = io.github.ezer_mackenzie.proximitytransfer.core.security.FrameEncryptionCodec.decrypt(bytes, keySpec)
+        }
+        return ProtocolFrameCodec.decode(bytes)
     }
 
     private suspend fun failSession() {
@@ -117,6 +127,14 @@ class ProtocolSender(
 
     private suspend fun sendFrame(type: FrameType, payload: ByteArray) {
         val frame = ProtocolFrame(ProtocolVersion.Current, type, payload)
-        connection.send(ProtocolFrameCodec.encode(frame))
+        var bytes = ProtocolFrameCodec.encode(frame)
+        if (keySpec != null) {
+            bytes = io.github.ezer_mackenzie.proximitytransfer.core.security.FrameEncryptionCodec.encrypt(
+                payload = bytes,
+                sequenceNumber = sequenceNumber++,
+                keySpec = keySpec,
+            )
+        }
+        connection.send(bytes)
     }
 }

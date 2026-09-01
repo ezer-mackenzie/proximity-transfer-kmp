@@ -47,6 +47,7 @@ interface ProximityTransferEngine {
         payload: ByteArray,
         session: TransferSession = TransferSession(),
         resumeRequest: ResumeRequest? = null,
+        keySpec: io.github.ezer_mackenzie.proximitytransfer.core.security.SessionKeySpec? = null,
     )
 
     /**
@@ -55,12 +56,14 @@ interface ProximityTransferEngine {
      * @param connection Open connection to the remote peer.
      * @param session Optional [TransferSession] to track state transitions.
      * @param existingBitmap Optional [ChunkBitmap] to resume an interrupted session.
+     * @param keySpec Optional [SessionKeySpec] for frame payload encryption/decryption.
      * @return Pair containing reconstructed payload bytes and the updated [ChunkBitmap].
      */
     suspend fun receivePayload(
         connection: Connection,
         session: TransferSession = TransferSession(),
         existingBitmap: ChunkBitmap? = null,
+        keySpec: io.github.ezer_mackenzie.proximitytransfer.core.security.SessionKeySpec? = null,
     ): Pair<ByteArray, ChunkBitmap>
 
     /** Encodes a multi-file manifest into binary format for transmission. */
