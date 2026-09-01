@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-09-01
+
+### Fixed
+
+- Integrated `FrameEncryptionCodec` into `ProtocolSender`, `ProtocolReceiver`, `ResumableProtocolSender`, `ResumableProtocolReceiver`, and `ProximityTransferEngine` for authenticated HMAC-SHA256 frame payload encryption.
+- Fixed `SessionKeyExchangeEngine.performResponderHandshake` to generate an independent 16-byte `serverNonce` instead of echoing the initiator's handshake.
+
 ## [1.0.0] - 2026-08-31
 
 ### Added
